@@ -103,6 +103,10 @@ This scaffold is configured for Rootstock Testnet by default. Here are the netwo
 
 You can get testnet tRBTC from the [Rootstock Faucet](https://faucet.rootstock.io/).
 
+### Getting Rootstock RPC API
+
+You can get Roostock RPC API, [here](https://rpc.rootstock.io/).
+
 ## Documentation
 
 Visit our [Rootstock docs](https://dev.rootstock.io) to learn how to start building with Rootstock.
