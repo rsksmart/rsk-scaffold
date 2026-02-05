@@ -11,8 +11,7 @@ import "hardhat-deploy";
 import "hardhat-deploy-ethers";
 
 // If not set, it uses the hardhat account 0 private key.
-const deployerPrivateKey =
-  process.env.DEPLOYER_PRIVATE_KEY;
+const deployerPrivateKey = process.env.DEPLOYER_PRIVATE_KEY;
 
 // forking rpc url
 const forkingURL = process.env.FORKING_URL || "";
@@ -24,7 +23,7 @@ const config: HardhatUserConfig = {
   solidity: {
     compilers: [
       {
-        version: "0.8.20",
+        version: "0.8.24",
         settings: {
           optimizer: {
             enabled: true,
