@@ -110,46 +110,23 @@ Edit `packages/nextjs/.env.local` and set:
   - Same as Hardhat RPC URL
   - Must be prefixed with `NEXT_PUBLIC_` to be accessible in the browser
 
-### 2. Install Dependencies
+### 2. Deploy Contracts
+
+From the **root directory**, run the following command to deploy the example contracts to Rootstock Testnet:
 
 ```bash
-yarn install
-```
-
-### 3. Start Local Blockchain (Optional)
-
-For local development:
-
-```bash
-yarn chain
-```
-
-Or skip this step to deploy directly to Rootstock Testnet.
-
-### 4. Deploy Contracts
-
-In a new terminal:
-
-```bash
-# Deploy all example contracts to localhost
-yarn deploy --tags examples
-
-# Or deploy to Rootstock Testnet
 yarn deploy --tags examples --network rootstockTestnet
-
-# Or deploy individually
-yarn deploy --tags ExampleToken
-yarn deploy --tags SimpleNFT
-yarn deploy --tags SimpleDAO
 ```
 
-### 5. Start Frontend
+> **IMPORTANT**: Always run `yarn deploy` from the root of the project, NOT from within the `packages/nextjs` or `packages/hardhat` directories. This ensures that the generated contract data is correctly shared between the smart contracts and the frontend.
+
+### 3. Start Frontend
 
 ```bash
 yarn start
 ```
 
-### 6. Access Examples
+### 4. Access Examples
 
 Navigate to:
 - **Examples Index**: http://localhost:3000/examples
