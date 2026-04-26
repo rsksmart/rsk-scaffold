@@ -36,5 +36,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 
-# Deployed contracts
+# Deployed contracts (generated on deploy; keep stub in repo so fresh clones build)
 /contracts/*
+!/contracts/deployedContracts.ts

@@ -120,6 +120,8 @@ yarn deploy --tags examples --network rootstockTestnet
 
 > **IMPORTANT**: Always run `yarn deploy` from the root of the project, NOT from within the `packages/nextjs` or `packages/hardhat` directories. This ensures that the generated contract data is correctly shared between the smart contracts and the frontend.
 
+The deploy step updates `packages/nextjs/contracts/deployedContracts.ts` with your contract addresses and ABIs. That file is committed as an empty stub so `yarn start` works on a fresh clone; after your first deploy it reflects your chain.
+
 ### 3. Start Frontend
 
 ```bash
