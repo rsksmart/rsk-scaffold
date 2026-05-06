@@ -5,7 +5,8 @@
   "workspaces": {
     "packages": [
       "packages/hardhat",
-      "packages/nextjs"
+      "packages/nextjs",
+      "packages/relayer"
     ]
   },
   "scripts": {
@@ -31,6 +32,9 @@
     "next:check-types": "yarn workspace @se-2/nextjs check-types",
     "next:build": "yarn workspace @se-2/nextjs build",
     "next:serve": "yarn workspace @se-2/nextjs serve",
+    "relayer": "yarn workspace @se-2/relayer dev",
+    "relayer:start": "yarn workspace @se-2/relayer start",
+    "addresses": "yarn workspace @se-2/hardhat addresses",
     "postinstall": "husky",
     "precommit": "lint-staged",
     "vercel": "yarn workspace @se-2/nextjs vercel",

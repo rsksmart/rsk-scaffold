@@ -10,15 +10,36 @@ import "@nomicfoundation/hardhat-verify";
 import "hardhat-deploy";
 import "hardhat-deploy-ethers";
 
-// If not set, it uses the hardhat account 0 private key.
-const deployerPrivateKey =
-  process.env.DEPLOYER_PRIVATE_KEY;
+// Get deployer private key from environment variable
+const deployerPrivateKey = process.env.DEPLOYER_PRIVATE_KEY;
+
+// Networks that are local-only and may safely run without an explicit
+// DEPLOYER_PRIVATE_KEY (Hardhat ships its own deterministic test accounts).
+const LOCAL_NETWORKS = new Set(["hardhat", "localhost"]);
+const targetNetwork = process.env.HARDHAT_NETWORK;
+
+// Hard-fail at config load when targeting any non-local network without
+// DEPLOYER_PRIVATE_KEY. This prevents the previous footgun where a missing
+// env var silently fell back to the universally-known Hardhat account-0
+// key while pointed at a real network.
+if (!deployerPrivateKey && targetNetwork && !LOCAL_NETWORKS.has(targetNetwork)) {
+  throw new Error(
+    `DEPLOYER_PRIVATE_KEY env var is required for network "${targetNetwork}". ` +
+    "Set DEPLOYER_PRIVATE_KEY in packages/hardhat/.env before running this command.",
+  );
+}
 
 // forking rpc url
 const forkingURL = process.env.FORKING_URL || "";
 
 // Rootstock RPC URL from environment variable
 const rootstockRpcUrl = process.env.ROOTSTOCK_RPC_URL || "https://rpc.testnet.rootstock.io";
+
+// Build the accounts list for non-local networks. We DO NOT fall back to
+// the well-known Hardhat key here — if the env var is missing, the network
+// has no signers, so any attempt to deploy/send a tx will fail explicitly
+// rather than silently using a public key.
+const remoteNetworkAccounts: string[] = deployerPrivateKey ? [deployerPrivateKey] : [];
 
 const config: HardhatUserConfig = {
   solidity: {
@@ -35,7 +56,7 @@ const config: HardhatUserConfig = {
       },
     ],
   },
-  defaultNetwork: "rootstockTestnet",
+  defaultNetwork: "hardhat", // Changed from "rootstockTestnet" for local development
   namedAccounts: {
     deployer: {
       // By default, it will take the first Hardhat account as the deployer
@@ -50,10 +71,11 @@ const config: HardhatUserConfig = {
         url: forkingURL,
         enabled: process.env.MAINNET_FORKING_ENABLED === "true",
       },
+      saveDeployments: true,
     },
     rootstockTestnet: {
       url: rootstockRpcUrl,
-      accounts: [deployerPrivateKey],
+      accounts: remoteNetworkAccounts,
       chainId: 31,
     },
   },

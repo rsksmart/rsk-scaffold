@@ -77,11 +77,22 @@ function getInheritedFunctions(sources: Record<string, any>, contractName: strin
 
 function getContractDataFromDeployments() {
   if (!fs.existsSync(DEPLOYMENTS_DIR)) {
-    throw Error("At least one other deployment script should exist to generate an actual contract.");
+    console.log("No deployments directory found. Skipping ABI generation.");
+    return {};
+  }
+  const directories = getDirectories(DEPLOYMENTS_DIR);
+  if (directories.length === 0) {
+    console.log("No deployment chains found. Skipping ABI generation.");
+    return {};
   }
   const output = {} as Record<string, any>;
-  for (const chainName of getDirectories(DEPLOYMENTS_DIR)) {
-    const chainId = fs.readFileSync(`${DEPLOYMENTS_DIR}/${chainName}/.chainId`).toString();
+  for (const chainName of directories) {
+    const chainIdPath = `${DEPLOYMENTS_DIR}/${chainName}/.chainId`;
+    if (!fs.existsSync(chainIdPath)) {
+      console.log(`No .chainId file found for ${chainName}. Skipping.`);
+      continue;
+    }
+    const chainId = fs.readFileSync(chainIdPath).toString();
     const contracts = {} as Record<string, any>;
     for (const contractName of getContractNames(`${DEPLOYMENTS_DIR}/${chainName}`)) {
       const { abi, address, metadata } = JSON.parse(
